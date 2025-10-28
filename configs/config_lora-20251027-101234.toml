@@ -1,0 +1,41 @@
+pretrained_model_name_or_path = "/abr/co_show03/models/sd15/v1-5-pruned.safetensors"
+train_data_dir = "/abr/co_show03/img"
+output_dir = "/abr/co_show03/outputs/loras"
+output_name = "monet_sd15_v5_768"
+
+network_module = "networks.lora"
+network_dim = 16
+network_alpha = 16
+
+resolution = "768,768"
+train_batch_size = 2
+gradient_accumulation_steps = 2
+learning_rate = 0.00008
+unet_lr = 0.00008
+text_encoder_lr = 4e-5
+lr_scheduler = "constant"
+lr_warmup_steps = 100
+
+max_train_epochs = 15
+save_every_n_epochs = 3
+
+mixed_precision = "fp16"
+save_precision = "fp16"
+gradient_checkpointing = true
+xformers = true
+
+caption_extension = ".txt"
+shuffle_caption = true
+keep_tokens = 1
+bucket_no_upscale = true
+enable_bucket = true
+min_bucket_reso = 256
+max_bucket_reso = 1024
+bucket_reso_steps = 64
+
+seed = 42
+clip_skip = 2
+max_token_length = 225
+cache_latents = true
+optimizer_type = "AdamW8bit"
+save_model_as = "safetensors"
