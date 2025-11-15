@@ -1,0 +1,15 @@
+/* Custom CSS for Dave Custom Node */
+.dave-custom-canvas {
+    z-index: -1 !important;
+    pointer-events: none !important;
+    opacity: 0.8;
+}
+
+/* Ensure widgets are above canvas */
+.comfy-multiline-input,
+input[type="number"],
+input[type="text"],
+.widget {
+    position: relative;
+    z-index: 10 !important;
+}
