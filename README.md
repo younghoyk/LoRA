@@ -25,6 +25,8 @@
 | **Custom Node** | MultiAreaConditioning  | 영역별 프롬프팅을 위한 오픈소스 노드 활용 |
 | **Evaluation**  | CLIP, BLIP-2, LPIPS    | 자동화된 정량 평가 파이프라인         |
 
+> [`custom_nodes`](./custom_nodes)에 위치한 커스텀 노드는 [ComfyUI_Dave_CustomNode](https://github.com/Davemane42/ComfyUI_Dave_CustomNode)를 기반으로 하며, 본 프로젝트에서 사용된 ComfyUI 버전에 맞춰 수정되었습니다.
+
 ---
 
 ## 3. Key Technical Implementations
@@ -38,10 +40,13 @@
 - 고해상도 예술 이미지 **190장** 수집 (모네의 그림)
 - 서명/워터마크 크롭 처리
 - **JoyCaption**으로 8~12줄 상세 캡션 자동 생성
+    - [`scripts/joycaption_batch.py`](./scripts/joycaption_batch.py): JoyCaption을 사용하여 이미지를 일괄 캡셔닝하는 데 사용됩니다.
 
 **Training Configuration**
 
 SD1.5부터 Flux까지, 캡셔닝 방식(BLIP → DeepBooru → LLaVA → JoyCaption), Learning Rate, Rank/Dim 값 등을 조정하며 **총 22회의 실험**을 진행했습니다. AdamW 8bit와 Gradient Checkpointing을 적용하여 제한된 GPU 자원(RTX A6000) 내에서 학습 효율을 극대화했습니다.
+
+> 실험 결과 및 상세 학습 설정 파일들은 [`configs`](./configs) 디렉토리에서 확인하실 수 있습니다.
 
 ```
 Structure:    Rank 16 / Alpha 16
@@ -51,10 +56,6 @@ Precision:    bf16 + fp8 base
 Steps:        2,850
 Batch Size:   4
 ```
-
-> 최종 학습 설정 파일: [`training/config.json`](./training/config.json)
->
-> 전체 실험 기록: [LoRA Training Configs (22 iterations)](https://github.com/younghoyk/LoRA/tree/master/configs)
 
 #### LoRA 적용 전/후 비교
 
@@ -87,7 +88,9 @@ Batch Size:   4
 ### C. Automated Evaluation Pipeline
 
 대회에서 제시한 정량 평가 기준(CLIP, BLIP-2, LPIPS)을 충족하기 위해, Python 기반의 자동 평가 파이프라인을 구축했습니다. 생성된 이미지들의 점수를 자동으로 산출하여 CSV/JSON 형식으로 출력하고, 이를 기반으로 최종 결과물을 선별했습니다.
-> 파이프라인 코드: [`evaluation/evaluate.py`](./evaluation/evaluate.py)
+> 파이프라인 코드: [`scripts/evaluation.py`](./scripts/evaluation.py)
+>
+> 정량적 평가 파이프라인을 위해 사용됩니다.
 
 | Metric                | Role                        | Target |
 | :-------------------- | :-------------------------- | :----: |
@@ -142,11 +145,12 @@ Total = (CLIP_norm × 0.2) + (LPIPS_norm × 0.3) + (BLIP2_norm × 0.5)
 │   ├── final/                  # 최종 작품 (LoRA 적용)
 │   ├── before/                 # 비교용 (LoRA 미적용)
 │   └── workflow_diagram.png
-├── training/
-│   └── config.json             # LoRA 학습 설정
-├── workflows/                  # ComfyUI 워크플로우
-└── evaluation/
-    └── evaluate.py             # 정량 평가 파이프라인
+├── configs/                    # LoRA 학습 실험 설정들
+├── custom_nodes/               # 수정된 Custom Node
+├── workflow/                   # ComfyUI 워크플로우 JSON
+└── scripts/
+    ├── evaluation.py           # 정량 평가 파이프라인
+    └── joycaption_batch.py     # 캡션 생성 스크립트
 ```
 
 ---
