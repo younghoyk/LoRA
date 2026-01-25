@@ -73,7 +73,7 @@ Batch Size:   4
 
 단순 텍스트 프롬프트를 넘어, 화면 내 요소의 물리적 배치를 정밀하게 제어하는 워크플로우를 설계했습니다.
 
-오픈소스 `ComfyUI_Dave_CustomNode`의 `MultiAreaConditioning` 노드를 활용하여, 좌표 기반의 영역 분할 로직으로 배경, 인물, 동작을 독립적으로 제어(X, Y, W, H)할 수 있는 워크플로우를 구축했습니다.
+[`custom_nodes`](./custom_nodes)에 탑재된 **수정된 MultiAreaConditioning 노드**(오픈소스 [ComfyUI_Dave_CustomNode](https://github.com/Davemane42/ComfyUI_Dave_CustomNode) 기반)를 활용하여, 좌표 기반의 영역 분할 로직으로 배경, 인물, 동작을 독립적으로 제어(X, Y, W, H)할 수 있는 워크플로우를 구축했습니다.
 
 **영역별 제어 예시**
 
